@@ -4,9 +4,9 @@ const router: Router = express.Router();
 
 router
     .post('/register', async (req: Request, res: Response) => {
-        const { title, description, date } = req.body;
+        const { title, description, status, date } = req.body;
         try {
-            const task = new Task({ title, description, date });
+            const task = new Task({ title, description, status, date });
             await task.save();
             res.status(201).json(task);
         } catch (error) {
@@ -23,10 +23,10 @@ router
     })
     .put('/task/:id', async (req: Request, res: Response) => {
         const { id } = req.params;
-        const { title, description, date } = req.body;
+        const { title, description, status, date } = req.body;
 
         try {
-            const task = await Task.findByIdAndUpdate(id, { title, description, date }, { new: true });
+            const task = await Task.findByIdAndUpdate(id, { title, description, status, date }, { new: true });
             if (!task) {
                 res.status(404).json({ message: 'Task não encontrada' });
             }
