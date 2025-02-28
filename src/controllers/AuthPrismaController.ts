@@ -27,7 +27,12 @@ class AuthPrismaController {
 
     static async login(req: Request, res: Response): Promise<any> {
         const { email, password } = req.body;
-        const user = await User.findOne({ email });
+        const user = await prisma.user.findUnique({
+            where: {
+                email
+            }
+        });
+        
         if(!user)
             return res.status(400).send({ message: "Invalid Email or Password"});
         
@@ -42,7 +47,7 @@ class AuthPrismaController {
         if(secret) {
             const token = jwt.sign(
                 {
-                    id: user._id,
+                    id: user.id,
                 },
                 secret,
                 {

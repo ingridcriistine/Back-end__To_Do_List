@@ -1,13 +1,22 @@
 import express, { Request, Response, Router } from 'express';
 import Task from '../models/Task.ts';
+import { prisma } from '../lib/prisma.ts'
 
 class TaskController {
     static createTask(req: Request, res: Response) {
         const { title, description, status, date } = req.body;
         try {
-            const task = new Task({ title, description, status, date });
-            task.save();
+            const task = prisma.task.create({ 
+                data: {
+                    title: title, 
+                    description: description, 
+                    status: status, 
+                    date: date
+                } 
+            });
+
             res.status(201).json(task);
+
         } catch (error) {
             res.status(400).json({ message: 'Erro ao criar Task', error });
         }
@@ -15,7 +24,7 @@ class TaskController {
 
     static getTasks(req: Request, res: Response) {
         try {
-            const task = Task.find();
+            const task = prisma.task.findMany();
             res.status(200).json(task);
         } catch (error) {
             res.status(400).json({ message: 'Erro ao buscar Tasks', error });
