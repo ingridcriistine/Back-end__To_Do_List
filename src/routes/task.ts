@@ -1,6 +1,6 @@
 import express, { Request, Response, Router } from 'express';
 import Task from '../models/Task.ts';
-import TaskController from '../controllers/taskController.ts';
+import TaskController from '../controllers/TaskController.ts';
 const router: Router = express.Router();
 
 router.get("/task", TaskController.getTasks);
